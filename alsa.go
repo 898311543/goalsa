@@ -111,7 +111,7 @@ func (d *device) createDevice(deviceName string, channels int, format Format, ra
 		return createError("could not set channels params", ret)
 	}
 	var zero C.int
-	ret = C.snd_pcm_hw_params_set_rate(d.h, hwParams, &rate1, &zero)
+	ret = C.snd_pcm_hw_params_set_rate_near(d.h, hwParams, &rate1, &zero)
 	if ret < 0 {
 		return createError("could not set rate params", ret)
 	}
