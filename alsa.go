@@ -76,6 +76,7 @@ func createError(errorMsg string, errorCode C.int) (err error) {
 
 func (d *device) createDevice(deviceName string, channels int, format Format, rate int, playback bool, bufferParams BufferParams) (err error) {
 	deviceCString := C.CString(deviceName)
+	var rate1 = C.uint(rate)
 	defer C.free(unsafe.Pointer(deviceCString))
 	var ret C.int
 	if playback {
@@ -109,7 +110,8 @@ func (d *device) createDevice(deviceName string, channels int, format Format, ra
 	if ret < 0 {
 		return createError("could not set channels params", ret)
 	}
-	ret = C.snd_pcm_hw_params_set_rate(d.h, hwParams, C.uint(rate), 0)
+	var zero C.int
+	ret = C.snd_pcm_hw_params_set_rate(d.h, hwParams, &rate1, &zero)
 	if ret < 0 {
 		return createError("could not set rate params", ret)
 	}
